@@ -1,8 +1,8 @@
 package com.unknownbrain.recipeapp.converters.toCommand;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
-import com.unknownbrain.recipeapp.models.Notes;
-import com.unknownbrain.recipeapp.models.Recipe;
+import com.unknownbrain.recipeapp.domain.Notes;
+import com.unknownbrain.recipeapp.domain.Recipe;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

@@ -3,12 +3,11 @@ package com.unknownbrain.recipeapp.services;
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.converters.fromCommand.RecipeCommandToRecipe;
 import com.unknownbrain.recipeapp.converters.toCommand.RecipeToRecipeCommand;
-import com.unknownbrain.recipeapp.models.Recipe;
+import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ class RecipeServiceTestIT {
     @Autowired
     RecipeCommandToRecipe recipeCommandToRecipe;
 
-    @Transactional
+//    @Transactional
     @Test
     void testSaveOfDescriptionToCommandObjectThenSaveTheCommandObjectToRepository() {
         //given

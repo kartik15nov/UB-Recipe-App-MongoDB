@@ -89,7 +89,7 @@
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
                                     <select class="form-control" th:field="*{difficulty}">
-                                        <option th:each="difficultyValue : ${T(com.unknownbrain.recipeapp.models.Difficulty).values()}"
+                                        <option th:each="difficultyValue : ${T(com.unknownbrain.recipeapp.domain.Difficulty).values()}"
                                                 th:value="${difficultyValue.name()}"
                                                 th:text="${difficultyValue.name()}"
                                         >val
@@ -157,6 +157,15 @@
                                         ' - ' + ingredient.getDescription())}">1 Teaspoon of Sugar
                                         </li>
                                     </ul>
+                                    <div th:each="ingredientEach, idx : ${recipe.ingredients}">
+                                        <input type="hidden" th:field="*{ingredients[__${idx.index}__].id}"/>
+                                        <input type="hidden" th:field="*{ingredients[__${idx.index}__].description}"/>
+                                        <input type="hidden" th:field="*{ingredients[__${idx.index}__].amount}"/>
+                                        <input type="hidden" th:field="*{ingredients[__${idx.index}__].uom.id}"/>
+                                    </div>
+                                    <div th:each="catEach, idx : ${recipe.categories}">
+                                        <input type="hidden" th:field="*{categories[__${idx.index}__].id}"/>
+                                    </div>
                                 </div>
                             </div>
                         </div>

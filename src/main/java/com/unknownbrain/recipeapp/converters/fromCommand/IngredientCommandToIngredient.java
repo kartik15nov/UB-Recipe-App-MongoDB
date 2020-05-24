@@ -2,7 +2,7 @@ package com.unknownbrain.recipeapp.converters.fromCommand;
 
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
 import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
-import com.unknownbrain.recipeapp.models.Ingredient;
+import com.unknownbrain.recipeapp.domain.Ingredient;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

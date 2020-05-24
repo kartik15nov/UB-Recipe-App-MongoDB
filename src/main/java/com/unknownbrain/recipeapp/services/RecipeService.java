@@ -1,7 +1,7 @@
 package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
-import com.unknownbrain.recipeapp.models.Recipe;
+import com.unknownbrain.recipeapp.domain.Recipe;
 
 import java.util.List;
 

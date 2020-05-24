@@ -1,16 +1,16 @@
 package com.unknownbrain.recipeapp.repositories;
 
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest
+@DataMongoTest
         //This will bring up the spring context
 class UnitOfMeasureRepositoryTestIT {
 
@@ -24,9 +24,9 @@ class UnitOfMeasureRepositoryTestIT {
     @Test
 //    @DirtiesContext
     void findByDescription() {
-        Optional<UnitOfMeasure> optionalUnitOfMeasure = unitOfMeasureRepository.findByDescription("Teaspoon");
+        Optional<UnitOfMeasure> optionalUnitOfMeasure = unitOfMeasureRepository.findByDescription("TeaSpoon");
 
-        assertEquals("Teaspoon", optionalUnitOfMeasure.get().getDescription());
+        assertEquals("TeaSpoon", optionalUnitOfMeasure.get().getDescription());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.unknownbrain.recipeapp.controllers;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
+import com.unknownbrain.recipeapp.exceptions.NotFoundException;
 import com.unknownbrain.recipeapp.services.ImageService;
 import com.unknownbrain.recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -103,10 +104,15 @@ public class ImageControllerTest {
     }
 
     @Test
-    void testGetImageNumberFormatException() throws Exception {
+    void testGetImageNotFoundException() throws Exception {
 
+        //given
+        when(recipeService.findCommandById("asdf")).thenThrow(new NotFoundException("Recipe Not Found"));
+
+        //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/asdf/recipeimage"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
+                //then
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 }

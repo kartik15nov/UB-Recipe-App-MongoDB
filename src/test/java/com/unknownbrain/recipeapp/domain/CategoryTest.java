@@ -1,4 +1,4 @@
-package com.unknownbrain.recipeapp.models;
+package com.unknownbrain.recipeapp.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package com.unknownbrain.recipeapp.controllers;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
+import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.exceptions.NotFoundException;
-import com.unknownbrain.recipeapp.models.Recipe;
 import com.unknownbrain.recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,11 +63,16 @@ class RecipeControllerTest {
     }
 
     @Test
-    void getRecipeNotFoundNumberFormatException() throws Exception {
+    void getRecipeNotFoundException() throws Exception {
 
+        //given
+        when(recipeService.findById("asdf")).thenThrow(new NotFoundException("Recipe Not Found"));
+
+        //when
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/asdf/view"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name("400error"));
+                //then
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
     }
 
     @Test

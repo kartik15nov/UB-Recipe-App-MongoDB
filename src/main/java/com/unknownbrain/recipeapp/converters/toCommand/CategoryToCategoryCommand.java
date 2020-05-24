@@ -1,7 +1,7 @@
 package com.unknownbrain.recipeapp.converters.toCommand;
 
 import com.unknownbrain.recipeapp.commands.CategoryCommand;
-import com.unknownbrain.recipeapp.models.Category;
+import com.unknownbrain.recipeapp.domain.Category;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

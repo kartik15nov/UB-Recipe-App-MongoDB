@@ -1,7 +1,7 @@
 package com.unknownbrain.recipeapp.converters.fromCommand;
 
 import com.unknownbrain.recipeapp.commands.NotesCommand;
-import com.unknownbrain.recipeapp.models.Notes;
+import com.unknownbrain.recipeapp.domain.Notes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package com.unknownbrain.recipeapp.converters.fromCommand;
 
 import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

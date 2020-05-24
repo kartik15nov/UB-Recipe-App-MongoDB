@@ -4,7 +4,7 @@ import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.converters.fromCommand.RecipeCommandToRecipe;
 import com.unknownbrain.recipeapp.converters.toCommand.RecipeToRecipeCommand;
 import com.unknownbrain.recipeapp.exceptions.NotFoundException;
-import com.unknownbrain.recipeapp.models.Recipe;
+import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

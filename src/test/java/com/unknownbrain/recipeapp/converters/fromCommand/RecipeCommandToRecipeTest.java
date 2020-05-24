@@ -4,8 +4,8 @@ import com.unknownbrain.recipeapp.commands.CategoryCommand;
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
 import com.unknownbrain.recipeapp.commands.NotesCommand;
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
-import com.unknownbrain.recipeapp.models.Difficulty;
-import com.unknownbrain.recipeapp.models.Recipe;
+import com.unknownbrain.recipeapp.domain.Difficulty;
+import com.unknownbrain.recipeapp.domain.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

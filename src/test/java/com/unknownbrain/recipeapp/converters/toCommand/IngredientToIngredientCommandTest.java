@@ -1,9 +1,9 @@
 package com.unknownbrain.recipeapp.converters.toCommand;
 
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
-import com.unknownbrain.recipeapp.models.Ingredient;
-import com.unknownbrain.recipeapp.models.Recipe;
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.Ingredient;
+import com.unknownbrain.recipeapp.domain.Recipe;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +41,6 @@ class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
         ingredient.setUom(null);
@@ -62,7 +61,6 @@ class IngredientToIngredientCommandTest {
         //given
         Ingredient ingredient = new Ingredient();
         ingredient.setId(ID_VALUE);
-        ingredient.setRecipe(RECIPE);
         ingredient.setAmount(AMOUNT);
         ingredient.setDescription(DESCRIPTION);
 

@@ -3,9 +3,9 @@ package com.unknownbrain.recipeapp.services;
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
 import com.unknownbrain.recipeapp.converters.fromCommand.IngredientCommandToIngredient;
 import com.unknownbrain.recipeapp.converters.toCommand.IngredientToIngredientCommand;
-import com.unknownbrain.recipeapp.models.Ingredient;
-import com.unknownbrain.recipeapp.models.Recipe;
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.Ingredient;
+import com.unknownbrain.recipeapp.domain.Recipe;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
 import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
 import lombok.extern.log4j.Log4j2;
@@ -49,9 +49,9 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
         Objects.requireNonNull(ingredientCommand);
 
-        String recipeId = ingredientCommand.getRecipeId();
+//        String recipeId = ingredientCommand.getRecipeId();
 
-        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(NullPointerException::new);
+        Recipe recipe = recipeRepository.findById(ingredientCommand.getRecipeId()).orElseThrow(NullPointerException::new);
 
         final int[] indexOfIngredient = {-1};
         Ingredient ingredientFromRecipe = recipe.getIngredients()
@@ -89,7 +89,7 @@ public class IngredientServiceImpl implements IngredientService {
                 .ifPresent(ingredient -> {
                     log.debug("Deleting ingredient :{} from recipe :{}", ingredient.getId(), recipeId);
 
-                    ingredient.setRecipe(null);
+//                    ingredient.setRecipe(null);
                     recipe.getIngredients().remove(ingredient);
                 });
         recipeRepository.save(recipe);

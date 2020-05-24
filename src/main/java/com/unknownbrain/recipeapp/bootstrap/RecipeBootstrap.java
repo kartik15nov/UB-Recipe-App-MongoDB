@@ -1,6 +1,6 @@
 package com.unknownbrain.recipeapp.bootstrap;
 
-import com.unknownbrain.recipeapp.models.*;
+import com.unknownbrain.recipeapp.domain.*;
 import com.unknownbrain.recipeapp.repositories.CategoryRepository;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
 import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
@@ -33,10 +33,23 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        loadCategories();
-        loadUom();
-        recipeRepository.saveAll(getRecipes());
+
         log.debug("Loading Bootstrap Data..");
+
+        if (categoryRepository.count() == 0L) {
+            log.debug("Loading Categories");
+            loadCategories();
+        }
+
+        if (unitOfMeasureRepository.count() == 0L) {
+            log.debug("Loading UOMs");
+            loadUom();
+        }
+
+        if (recipeRepository.count() == 0L) {
+            log.debug("Loading Recipes");
+            recipeRepository.saveAll(getRecipes());
+        }
     }
 
     private void loadCategories() {

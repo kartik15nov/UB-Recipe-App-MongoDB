@@ -1,4 +1,4 @@
-package com.unknownbrain.recipeapp.models;
+package com.unknownbrain.recipeapp.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +32,6 @@ public class Recipe {
     private List<Category> categories = new ArrayList<>();
 
     public Recipe addIngredient(Ingredient ingredient) {
-//        ingredient.setRecipe(this);
         this.ingredients.add(ingredient);
         return this;
     }
@@ -40,7 +39,6 @@ public class Recipe {
     public void setNotes(Notes notes) {
         if (notes != null) {
             this.notes = notes;
-//            notes.setRecipe(this);
         }
     }
 }

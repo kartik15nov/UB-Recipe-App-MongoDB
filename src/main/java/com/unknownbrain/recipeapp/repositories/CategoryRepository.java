@@ -1,6 +1,6 @@
 package com.unknownbrain.recipeapp.repositories;
 
-import com.unknownbrain.recipeapp.models.Category;
+import com.unknownbrain.recipeapp.domain.Category;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

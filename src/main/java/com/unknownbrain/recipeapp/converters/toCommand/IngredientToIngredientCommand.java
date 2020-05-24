@@ -1,8 +1,8 @@
 package com.unknownbrain.recipeapp.converters.toCommand;
 
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
-import com.unknownbrain.recipeapp.models.Ingredient;
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.Ingredient;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +21,9 @@ public class IngredientToIngredientCommand implements Converter<Ingredient, Ingr
     public IngredientCommand convert(Ingredient ingredient) {
         Objects.requireNonNull(ingredient);
 
-        final IngredientCommand command = new IngredientCommand();
+        IngredientCommand command = new IngredientCommand();
 
         command.setId(ingredient.getId());
-        if (ingredient.getRecipe() != null)
-            command.setRecipeId(ingredient.getRecipe().getId());
         command.setDescription(ingredient.getDescription());
         command.setAmount(ingredient.getAmount());
         UnitOfMeasure unitOfMeasure = ingredient.getUom() != null ? ingredient.getUom() : new UnitOfMeasure();

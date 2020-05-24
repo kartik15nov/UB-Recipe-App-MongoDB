@@ -2,7 +2,7 @@ package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
 import com.unknownbrain.recipeapp.converters.toCommand.UnitOfMeasureToUnitOfMeasureCommand;
-import com.unknownbrain.recipeapp.models.UnitOfMeasure;
+import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
