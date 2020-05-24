@@ -1,5 +1,5 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
+# Java Maven CircleCI 2.0 configuration file
+
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
 version: 2
@@ -35,7 +35,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.m2
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests! and gen code coverage
