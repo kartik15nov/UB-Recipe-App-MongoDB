@@ -24,16 +24,27 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    compile 'org.springframework.boot:spring-boot-starter-validation'
-    compile 'org.webjars:bootstrap:3.3.7-1'
+	compile 'org.springframework.boot:spring-boot-starter-validation'
+	compile 'org.webjars:bootstrap:3.3.7-1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            //srcDir 'src'
+        }
+    }
+    test {
+        java {
+            srcDir 'java'
+        }
     }
 }
 
