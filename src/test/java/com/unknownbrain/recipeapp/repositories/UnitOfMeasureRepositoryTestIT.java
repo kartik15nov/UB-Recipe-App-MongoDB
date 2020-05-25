@@ -2,6 +2,7 @@ package com.unknownbrain.recipeapp.repositories;
 
 import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 @DataMongoTest
         //This will bring up the spring context
 class UnitOfMeasureRepositoryTestIT {
