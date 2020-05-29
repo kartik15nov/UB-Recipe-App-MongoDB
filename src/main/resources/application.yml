@@ -4,5 +4,5 @@ spring:
       enabled: ALWAYS
   data:
     mongodb:
-      port: 27017
+      port: 0
       host: localhost
