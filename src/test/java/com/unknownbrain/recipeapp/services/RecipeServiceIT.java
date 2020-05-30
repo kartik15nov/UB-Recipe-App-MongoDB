@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class RecipeServiceTestIT {
+class RecipeServiceIT {
 
     public static final String NEW_DESCRIPTION = "New Description";
 
