@@ -1,6 +1,7 @@
 package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
+import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
 import com.unknownbrain.recipeapp.converters.fromCommand.IngredientCommandToIngredient;
 import com.unknownbrain.recipeapp.converters.toCommand.IngredientToIngredientCommand;
 import com.unknownbrain.recipeapp.converters.toCommand.UnitOfMeasureToUnitOfMeasureCommand;
@@ -8,16 +9,18 @@ import com.unknownbrain.recipeapp.domain.Ingredient;
 import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.domain.UnitOfMeasure;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
-import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
+import com.unknownbrain.recipeapp.repositories.reactive.RecipeReactiveRepository;
+import com.unknownbrain.recipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +32,10 @@ class IngredientServiceImplTest {
     RecipeRepository recipeRepository;
 
     @Mock
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    RecipeReactiveRepository recipeReactiveRepository;
+
+    @Mock
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 
     IngredientToIngredientCommand ingredientToIngredientCommand;
     IngredientCommandToIngredient ingredientCommandToIngredient;
@@ -38,7 +44,7 @@ class IngredientServiceImplTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
         ingredientToIngredientCommand = new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand());
-        ingredientService = new IngredientServiceImpl(recipeRepository, unitOfMeasureRepository, ingredientToIngredientCommand, ingredientCommandToIngredient);
+        ingredientService = new IngredientServiceImpl(recipeRepository, recipeReactiveRepository, unitOfMeasureReactiveRepository, ingredientToIngredientCommand, ingredientCommandToIngredient);
     }
 
     @Test
@@ -61,44 +67,45 @@ class IngredientServiceImplTest {
         recipe.addIngredient(ingredient3);
 
 
-        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 
         //when
-        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("5", "7");
+        IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId("5", "7").block();
 
         //then
+        assertNotNull(ingredientCommand);
         assertEquals("7", ingredientCommand.getId());
-//        assertEquals("5", ingredientCommand.getRecipeId());
-        verify(recipeRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
     }
 
     @Test
     void saveIngredientCommand() {
         //given
+        IngredientCommand command = new IngredientCommand();
+        command.setId("12");
+        command.setRecipeId("20");
+        command.setUom(new UnitOfMeasureCommand());
+        command.getUom().setId("1234");
+
         Recipe recipe = new Recipe();
-        recipe.setId("10");
+        recipe.addIngredient(new Ingredient());
+        recipe.getIngredients().get(0).setId("12");
 
-        Ingredient ingredient = new Ingredient();
-        ingredient.setId("12");
-        ingredient.setDescription(" hellow");
-        ingredient.setAmount(new BigDecimal(1000));
-        UnitOfMeasure uom = new UnitOfMeasure();
-        uom.setId("34");
-        ingredient.setUom(uom);
-        recipe.addIngredient(ingredient);
+        UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+        unitOfMeasure.setId("1234");
 
-        IngredientCommand ingredientCommand = ingredientToIngredientCommand.convert(ingredient);
-
-        when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
-        when(recipeRepository.save(any())).thenReturn(recipe);
+        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(recipe));
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(unitOfMeasure));
 
         //when
-        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand);
+        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(command).block();
 
         //then
+        assertNotNull(savedIngredientCommand);
         assertEquals("12", savedIngredientCommand.getId());
-//        assertEquals("10", savedIngredientCommand.getRecipeId());
-        verify(recipeRepository).save(any(Recipe.class));
+        verify(recipeRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
 
