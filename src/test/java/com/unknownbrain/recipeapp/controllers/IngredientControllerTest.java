@@ -2,6 +2,7 @@ package com.unknownbrain.recipeapp.controllers;
 
 import com.unknownbrain.recipeapp.commands.IngredientCommand;
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
+import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
 import com.unknownbrain.recipeapp.services.IngredientService;
 import com.unknownbrain.recipeapp.services.RecipeService;
 import com.unknownbrain.recipeapp.services.UnitOfMeasureService;
@@ -13,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.ArrayList;
+import reactor.core.publisher.Flux;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -85,7 +85,7 @@ class IngredientControllerTest {
 
         //when
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new ArrayList<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/new"))
@@ -105,7 +105,7 @@ class IngredientControllerTest {
 
         //when
         when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new ArrayList<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/2/update"))
@@ -124,7 +124,7 @@ class IngredientControllerTest {
 
         //when
         when(ingredientService.saveIngredientCommand(any())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new ArrayList<>());
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(

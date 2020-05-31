@@ -2,30 +2,31 @@ package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
 import com.unknownbrain.recipeapp.converters.toCommand.UnitOfMeasureToUnitOfMeasureCommand;
-import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
+import com.unknownbrain.recipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+import reactor.core.publisher.Flux;
 
 @Log4j2
 @Service
 public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
-    UnitOfMeasureRepository unitOfMeasureRepository;
-    UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
 
-    public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitOfMeasureRepository, UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand) {
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+    private final UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
+
+    public UnitOfMeasureServiceImpl(UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository, UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand) {
+        this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
         this.unitOfMeasureToUnitOfMeasureCommand = unitOfMeasureToUnitOfMeasureCommand;
     }
 
     @Override
-    public List<UnitOfMeasureCommand> listAllUoms() {
-        return StreamSupport.stream(unitOfMeasureRepository.findAll()
-                .spliterator(), false)
-                .map(unitOfMeasureToUnitOfMeasureCommand::convert)
-                .collect(Collectors.toList());
+    public Flux<UnitOfMeasureCommand> listAllUoms() {
+        return unitOfMeasureReactiveRepository
+                .findAll()
+                .map(unitOfMeasureToUnitOfMeasureCommand::convert);
+//        return StreamSupport.stream(unitOfMeasureReactiveRepository.findAll()
+//                .spliterator(), false)
+//                .map(unitOfMeasureToUnitOfMeasureCommand::convert)
+//                .collect(Collectors.toList());
     }
 }
