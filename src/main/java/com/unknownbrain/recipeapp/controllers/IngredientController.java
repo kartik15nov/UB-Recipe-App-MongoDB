@@ -75,14 +75,13 @@ public class IngredientController {
     }
 
     @PostMapping("/recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand ingredientCommand, @PathVariable String recipeId) {
-        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand).block();
+    public String saveOrUpdate(@ModelAttribute IngredientCommand command, @PathVariable String recipeId) {
+        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
+        assert savedCommand != null;
 
-        log.debug("Recipe id from request :" + recipeId);
-        log.debug("saved recipe id:" + savedIngredientCommand.getRecipeId());
-        log.debug("saved ingredient id:" + savedIngredientCommand.getId());
+        log.debug("saved ingredient id:" + savedCommand.getId());
 
-        return "redirect:/recipe/" + recipeId + "/ingredient/" + savedIngredientCommand.getId() + "/view";
+        return "redirect:/recipe/" + recipeId + "/ingredient/" + savedCommand.getId() + "/view";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")

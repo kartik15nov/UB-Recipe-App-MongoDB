@@ -21,9 +21,10 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
     public Ingredient convert(IngredientCommand command) {
         Objects.requireNonNull(command);
 
-        final Ingredient ingredient = new Ingredient();
+        Ingredient ingredient = new Ingredient();
 
-        ingredient.setId(command.getId());
+        if (command.getId() != null && !command.getId().isEmpty())
+            ingredient.setId(command.getId());
         ingredient.setDescription(command.getDescription());
         ingredient.setAmount(command.getAmount());
         UnitOfMeasureCommand unitOfMeasureCommand = command.getUom() != null ? command.getUom() : new UnitOfMeasureCommand();
