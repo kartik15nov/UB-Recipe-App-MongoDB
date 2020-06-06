@@ -5,6 +5,7 @@ import com.unknownbrain.recipeapp.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,9 +13,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -31,6 +32,9 @@ class IndexControllerTest {
 
     @Mock
     Model model;
+
+    @Captor
+    ArgumentCaptor<List<Recipe>> argumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -54,13 +58,8 @@ class IndexControllerTest {
     void getIndexPage() {
 
         // Given
-        List<Recipe> recipes = new ArrayList<>();
-        recipes.add(new Recipe());
-        recipes.add(new Recipe());
-
+        List<Recipe> recipes = asList(new Recipe(), new Recipe());
         when(recipeService.getRecipes()).thenReturn(Flux.fromIterable(recipes));
-
-        ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
 
         //When
         String viewName = indexController.getIndexPage(model);
@@ -69,8 +68,6 @@ class IndexControllerTest {
         assertEquals("index", viewName);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-
-        List<Recipe> argCaptorList = argumentCaptor.getValue();
-        assertEquals(2, argCaptorList.size());
+        assertEquals(2, argumentCaptor.getValue().size());
     }
 }
