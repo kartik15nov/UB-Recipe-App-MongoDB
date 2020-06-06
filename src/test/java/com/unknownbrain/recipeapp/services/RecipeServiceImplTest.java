@@ -3,19 +3,21 @@ package com.unknownbrain.recipeapp.services;
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.converters.fromCommand.RecipeCommandToRecipe;
 import com.unknownbrain.recipeapp.converters.toCommand.RecipeToRecipeCommand;
-import com.unknownbrain.recipeapp.exceptions.NotFoundException;
 import com.unknownbrain.recipeapp.domain.Recipe;
-import com.unknownbrain.recipeapp.repositories.RecipeRepository;
+import com.unknownbrain.recipeapp.repositories.reactive.RecipeReactiveRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -24,7 +26,7 @@ class RecipeServiceImplTest {
     RecipeServiceImpl recipeService;
 
     @Mock
-    RecipeRepository recipeRepository;
+    RecipeReactiveRepository recipeRepository;
 
     @Mock
     RecipeCommandToRecipe recipeCommandToRecipe;
@@ -44,27 +46,13 @@ class RecipeServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId("1");
 
-        Optional<Recipe> recipeOptional = Optional.of(recipe);
+        when(recipeRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 
-        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
-
-        Recipe recipeReturned = recipeService.findById("1");
+        Recipe recipeReturned = recipeService.findById("1").block();
 
         assertNotNull(recipeReturned);
         verify(recipeRepository).findById(anyString());
         verify(recipeRepository, never()).findAll();
-    }
-
-    @Test
-    void getRecipeByIdTestNotFound() {
-        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
-            Optional<Recipe> recipeOptional = Optional.empty();
-
-            when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
-
-            Recipe recipeReturned = recipeService.findById("1");
-        });
-
     }
 
     @Test
@@ -73,14 +61,14 @@ class RecipeServiceImplTest {
         recipe.setId("1");
         Optional<Recipe> recipeOptional = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(Mono.just(recipe));
 
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId("1");
 
         when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
 
-        RecipeCommand commandById = recipeService.findCommandById("1");
+        RecipeCommand commandById = recipeService.findCommandById("1").block();
 
         assertNotNull(commandById);
         verify(recipeRepository, times(1)).findById(anyString());
@@ -94,9 +82,10 @@ class RecipeServiceImplTest {
         Recipe recipe1 = new Recipe();
         recipeData.add(recipe1);
 
-        when(recipeRepository.findAll()).thenReturn(recipeData);
+        when(recipeRepository.findAll()).thenReturn(Flux.just(recipe1));
 
-        List<Recipe> recipes = recipeService.getRecipes();
+        List<Recipe> recipes = recipeService.getRecipes().collectList().block();
+        assert recipes != null;
         assertEquals(recipes.size(), 1);
 
         //To verify the interactions, e.g: to check how many time the findAll() method gets called, then don this..

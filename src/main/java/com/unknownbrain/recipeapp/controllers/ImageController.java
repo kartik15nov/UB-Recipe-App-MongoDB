@@ -30,7 +30,7 @@ public class ImageController {
     @GetMapping("/recipe/{recipeId}/image")
     public String getImageForm(@PathVariable String recipeId, Model model) {
 
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 
         model.addAttribute("recipe", recipeCommand);
 
@@ -48,7 +48,7 @@ public class ImageController {
     @GetMapping("/recipe/{recipeId}/recipeimage")
     public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException {
 
-        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+        RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 
         if (recipeCommand.getImage() != null) {
             byte[] bytes = new byte[recipeCommand.getImage().length];
