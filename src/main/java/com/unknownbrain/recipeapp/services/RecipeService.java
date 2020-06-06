@@ -2,17 +2,17 @@ package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.domain.Recipe;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RecipeService {
-    List<Recipe> getRecipes();
+    Flux<Recipe> getRecipes();
 
-    Recipe findById(String id);
+    Mono<Recipe> findById(String id);
 
-    void deleteById(String idToDelete);
+    Mono<Void> deleteById(String idToDelete);
 
-    RecipeCommand findCommandById(String id);
+    Mono<RecipeCommand> findCommandById(String id);
 
-    RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
+    Mono<RecipeCommand> saveRecipeCommand(RecipeCommand recipeCommand);
 }
