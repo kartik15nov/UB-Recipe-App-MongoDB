@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-//import org.springframework.web.servlet.ModelAndView;
 
 @Log4j2
 @ControllerAdvice
@@ -20,12 +19,6 @@ public class ControllerExceptionHandler {
         log.error("Handling Number Format exception");
         log.error("exception", exception);
 
-//        ModelAndView modelAndView = new ModelAndView();
-
-//        modelAndView.setViewName("400error");
-//        modelAndView.addObject("exception", exception);
-//
-//        return modelAndView;
         model.addAttribute("exception", exception);
         return "400error";
     }
@@ -36,13 +29,6 @@ public class ControllerExceptionHandler {
 
         log.error("Handling not found exception");
         log.error("exception", exception);
-
-//        ModelAndView modelAndView = new ModelAndView();
-
-//        modelAndView.setViewName("404error");
-//        modelAndView.addObject("exception", exception);
-
-//        return modelAndView;
 
         model.addAttribute("exception", exception);
         return "404error";
