@@ -31,7 +31,7 @@ public class IngredientController {
     @GetMapping("/recipe/{id}/ingredients")
     public String listIngredients(@PathVariable String id, Model model) {
         log.debug("Getting ingredient list for recipe id: " + id);
-        model.addAttribute("recipe", recipeService.findCommandById(id).block());
+        model.addAttribute("recipe", recipeService.findCommandById(id));
 
         return "recipe/ingredient/list";
     }
@@ -40,7 +40,7 @@ public class IngredientController {
     public String viewIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
         log.debug("Getting ingredient list for recipe id: " + recipeId);
 
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block());
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
 
         return "recipe/ingredient/view";
     }
@@ -60,7 +60,7 @@ public class IngredientController {
         //init uom
         ingredientCommand.setUom(new UnitOfMeasureCommand());
 
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
         return "recipe/ingredient/ingredientform";
     }
@@ -68,8 +68,8 @@ public class IngredientController {
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
     public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block());
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+        model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
         return "recipe/ingredient/ingredientform";
     }
@@ -88,7 +88,7 @@ public class IngredientController {
     public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId) {
 
         log.debug("Deleting the ingredient id : " + ingredientId);
-        ingredientService.deleteById(recipeId, ingredientId).block();
+        ingredientService.deleteById(recipeId, ingredientId);
 
         return "redirect:/recipe/" + recipeId + "/ingredients";
     }
