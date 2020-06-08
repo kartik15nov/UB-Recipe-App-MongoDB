@@ -82,7 +82,7 @@ public class IngredientController {
     }
 
     @PostMapping("/recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand command, @PathVariable String recipeId, Model model) {
+    public String saveOrUpdate(@ModelAttribute("ingredient") IngredientCommand command, @PathVariable String recipeId, Model model) {
 
         webDataBinder.validate();
         BindingResult bindingResult = webDataBinder.getBindingResult();
@@ -94,10 +94,13 @@ public class IngredientController {
             return RECIPE_INGREDIENT_INGREDIENTFORM;
         }
 
-        IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
-        assert savedCommand != null;
+        final IngredientCommand[] savedCommand = new IngredientCommand[1];
+        ingredientService.saveIngredientCommand(command).subscribe(ingredientCommand -> {
+            savedCommand[0] =command;
+        });
+        assert savedCommand[0] != null;
 
-        return "redirect:/recipe/" + recipeId + "/ingredient/" + savedCommand.getId() + "/view";
+        return "redirect:/recipe/" + recipeId + "/ingredient/" + savedCommand[0].getId() + "/view";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")

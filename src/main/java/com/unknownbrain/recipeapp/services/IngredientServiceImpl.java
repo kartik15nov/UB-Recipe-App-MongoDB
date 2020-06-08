@@ -54,12 +54,15 @@ public class IngredientServiceImpl implements IngredientService {
         Objects.requireNonNull(command);
 
         //Find the recipe from the repository, if found then find the ingredient, if found update it, else add the new ingredient to recipe. Save the recipe, get the ingredient from recipe and convert it to command and return.
-        Recipe recipe = recipeReactiveRepository.findById(command.getRecipeId()).block();
+        final Recipe[] recipe = new Recipe[1];
+        recipeReactiveRepository
+                .findById(command.getRecipeId())
+                .subscribe(recipe1 -> recipe[0] = recipe1);
 
-        if (recipe != null) {
+        if (recipe[0] != null) {
             Ingredient updatedIngredient;
 
-            Optional<Ingredient> optionalIngredient = recipe.getIngredients()
+            Optional<Ingredient> optionalIngredient = recipe[0].getIngredients()
                     .stream()
                     .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
                     .findFirst();
@@ -73,11 +76,11 @@ public class IngredientServiceImpl implements IngredientService {
             } else {
                 updatedIngredient = ingredientCommandToIngredient.convert(command);
                 Objects.requireNonNull(updatedIngredient).setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
-                recipe.addIngredient(updatedIngredient);
+                recipe[0].addIngredient(updatedIngredient);
             }
 
             //Save the Recipe
-            Recipe savedRecipe = recipeReactiveRepository.save(recipe).block();
+            Recipe savedRecipe = recipeReactiveRepository.save(recipe[0]).block();
             assert savedRecipe != null;
 
             //convert the ingredient to command and return with Mono
@@ -90,7 +93,7 @@ public class IngredientServiceImpl implements IngredientService {
             IngredientCommand savedCommand = ingredientToIngredientCommand.convert(savedIngredient);
             assert savedCommand != null;
 
-            savedCommand.setRecipeId(recipe.getId());
+            savedCommand.setRecipeId(recipe[0].getId());
             return Mono.just(savedCommand);
 
         } else {
