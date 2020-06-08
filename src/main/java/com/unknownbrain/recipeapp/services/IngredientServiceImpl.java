@@ -53,53 +53,69 @@ public class IngredientServiceImpl implements IngredientService {
     public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command) {
         Objects.requireNonNull(command);
 
-        //Find the recipe from the repository, if found then find the ingredient, if found update it, else add the new ingredient to recipe. Save the recipe, get the ingredient from recipe and convert it to command and return.
-        final Recipe[] recipe = new Recipe[1];
-        recipeReactiveRepository
-                .findById(command.getRecipeId())
-                .subscribe(recipe1 -> recipe[0] = recipe1);
-
-        if (recipe[0] != null) {
-            Ingredient updatedIngredient;
-
-            Optional<Ingredient> optionalIngredient = recipe[0].getIngredients()
+        return recipeReactiveRepository.findById(command.getRecipeId()).map(recipe -> {
+            recipe.getIngredients()
                     .stream()
                     .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
-                    .findFirst();
+                    .findFirst()
+                    .ifPresentOrElse(ingredient -> {
+                        ingredient.setDescription(command.getDescription());
+                        ingredient.setAmount(command.getAmount());
+                    }, () -> {
+                        recipe.getIngredients().add(ingredientCommandToIngredient.convert(command));
+                    });
+            return recipe;
+        }).flatMap(recipeReactiveRepository::save)
+                .map(recipe -> recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
+                    .findFirst().orElseThrow())
+                .map(ingredientToIngredientCommand::convert);
+
+
+        //Find the recipe from the repository, if found then find the ingredient, if found update it, else add the new ingredient to recipe. Save the recipe, get the ingredient from recipe and convert it to command and return.
+  //      Recipe recipe = recipeReactiveRepository.findById(command.getRecipeId()).block();
+
+    //    if (recipe != null) {
+//            Ingredient updatedIngredient;
+//
+//            Optional<Ingredient> optionalIngredient = recipe.getIngredients()
+//                    .stream()
+//                    .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
+//                    .findFirst().;
 
             //If not present, convert the command to ingredient and add to recipe
-            if (optionalIngredient.isPresent()) {
-                updatedIngredient = optionalIngredient.get();
-                updatedIngredient.setDescription(command.getDescription());
-                updatedIngredient.setAmount(command.getAmount());
-                updatedIngredient.setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
-            } else {
-                updatedIngredient = ingredientCommandToIngredient.convert(command);
-                Objects.requireNonNull(updatedIngredient).setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
-                recipe[0].addIngredient(updatedIngredient);
-            }
+//            if (optionalIngredient.isPresent()) {
+//                updatedIngredient = optionalIngredient.get();
+//                updatedIngredient.setDescription(command.getDescription());
+//                updatedIngredient.setAmount(command.getAmount());
+//                updatedIngredient.setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
+//            } else {
+//                updatedIngredient = ingredientCommandToIngredient.convert(command);
+//                Objects.requireNonNull(updatedIngredient).setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
+//                recipe.addIngredient(updatedIngredient);
+//            }
 
-            //Save the Recipe
-            Recipe savedRecipe = recipeReactiveRepository.save(recipe[0]).block();
-            assert savedRecipe != null;
-
-            //convert the ingredient to command and return with Mono
-            Ingredient finalUpdatedIngredient = updatedIngredient;
-            Ingredient savedIngredient = savedRecipe.getIngredients()
-                    .stream()
-                    .filter(ingredient -> ingredient.getId().equals(finalUpdatedIngredient.getId()))
-                    .findFirst().get();
-
-            IngredientCommand savedCommand = ingredientToIngredientCommand.convert(savedIngredient);
-            assert savedCommand != null;
-
-            savedCommand.setRecipeId(recipe[0].getId());
-            return Mono.just(savedCommand);
-
-        } else {
-            log.error("Recipe not found for id : " + command.getRecipeId());
-            return Mono.just(new IngredientCommand());
-        }
+//            //Save the Recipe
+//            Recipe savedRecipe = recipeReactiveRepository.save(recipe).block();
+//            assert savedRecipe != null;
+//
+//            //convert the ingredient to command and return with Mono
+//            Ingredient finalUpdatedIngredient = updatedIngredient;
+//            Ingredient savedIngredient = savedRecipe.getIngredients()
+//                    .stream()
+//                    .filter(ingredient -> ingredient.getId().equals(finalUpdatedIngredient.getId()))
+//                    .findFirst().get();
+//
+//            IngredientCommand savedCommand = ingredientToIngredientCommand.convert(savedIngredient);
+//            assert savedCommand != null;
+//
+//            savedCommand.setRecipeId(recipe.getId());
+//            return Mono.just(savedCommand);
+//
+//        } else {
+//            log.error("Recipe not found for id : " + command.getRecipeId());
+//            return Mono.just(new IngredientCommand());
+//        }
     }
 
     @Override
