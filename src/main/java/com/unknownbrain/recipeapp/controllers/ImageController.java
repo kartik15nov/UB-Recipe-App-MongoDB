@@ -13,8 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ImageController {
-    ImageService imageService;
-    RecipeService recipeService;
+    private final ImageService imageService;
+    private final RecipeService recipeService;
 
     public ImageController(ImageService imageService, RecipeService recipeService) {
         this.imageService = imageService;
