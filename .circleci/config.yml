@@ -2,7 +2,9 @@
 
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  gradle: circleci/gradle@2.1.0
 jobs:
   build:
     docker:
