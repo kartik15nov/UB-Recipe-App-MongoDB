@@ -61,12 +61,13 @@ public class IngredientServiceImpl implements IngredientService {
                             .stream()
                             .filter(ingredient -> ingredient.getId().equalsIgnoreCase(command.getId()))
                             .findFirst()
-                            .ifPresentOrElse(ingredient -> {
+                            .map(ingredient -> {
                                 ingredientId.set(command.getId());
                                 ingredient.setDescription(command.getDescription());
                                 ingredient.setAmount(command.getAmount());
-                            }, () -> {
-
+                                return recipe;
+                            })
+                            .orElseGet(() -> {
                                 Ingredient newIngredient = ingredientCommandToIngredient.convert(command);
                                 ingredientId.set(Objects.requireNonNull(newIngredient).getId());
                                 unitOfMeasureReactiveRepository
@@ -76,7 +77,24 @@ public class IngredientServiceImpl implements IngredientService {
                                             return Mono.just(unitOfMeasure);
                                         }).subscribe();
                                 recipe.addIngredient(newIngredient);
+                                return recipe;
                             });
+//                            .ifPresentOrElse(ingredient -> {
+//                                ingredientId.set(command.getId());
+//                                ingredient.setDescription(command.getDescription());
+//                                ingredient.setAmount(command.getAmount());
+//                            }, () -> {
+//
+//                                Ingredient newIngredient = ingredientCommandToIngredient.convert(command);
+//                                ingredientId.set(Objects.requireNonNull(newIngredient).getId());
+//                                unitOfMeasureReactiveRepository
+//                                        .findById(command.getUom().getId())
+//                                        .flatMap(unitOfMeasure -> {
+//                                            newIngredient.setUom(unitOfMeasure);
+//                                            return Mono.just(unitOfMeasure);
+//                                        }).subscribe();
+//                                recipe.addIngredient(newIngredient);
+//                            });
                     return recipe;
                 })
                 .flatMap(recipe -> recipeReactiveRepository.save(recipe).then(Mono.just(recipe)))
