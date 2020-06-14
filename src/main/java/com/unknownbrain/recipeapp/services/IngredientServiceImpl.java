@@ -79,22 +79,6 @@ public class IngredientServiceImpl implements IngredientService {
                                 recipe.addIngredient(newIngredient);
                                 return recipe;
                             });
-//                            .ifPresentOrElse(ingredient -> {
-//                                ingredientId.set(command.getId());
-//                                ingredient.setDescription(command.getDescription());
-//                                ingredient.setAmount(command.getAmount());
-//                            }, () -> {
-//
-//                                Ingredient newIngredient = ingredientCommandToIngredient.convert(command);
-//                                ingredientId.set(Objects.requireNonNull(newIngredient).getId());
-//                                unitOfMeasureReactiveRepository
-//                                        .findById(command.getUom().getId())
-//                                        .flatMap(unitOfMeasure -> {
-//                                            newIngredient.setUom(unitOfMeasure);
-//                                            return Mono.just(unitOfMeasure);
-//                                        }).subscribe();
-//                                recipe.addIngredient(newIngredient);
-//                            });
                     return recipe;
                 })
                 .flatMap(recipe -> recipeReactiveRepository.save(recipe).then(Mono.just(recipe)))
