@@ -4,6 +4,7 @@ import com.unknownbrain.recipeapp.domain.*;
 import com.unknownbrain.recipeapp.repositories.CategoryRepository;
 import com.unknownbrain.recipeapp.repositories.RecipeRepository;
 import com.unknownbrain.recipeapp.repositories.UnitOfMeasureRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -18,17 +19,12 @@ import java.util.Optional;
 
 @Log4j2
 @Component
+@RequiredArgsConstructor
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
-
-    public RecipeBootstrap(CategoryRepository categoryRepository, RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.categoryRepository = categoryRepository;
-        this.recipeRepository = recipeRepository;
-        this.unitOfMeasureRepository = unitOfMeasureRepository;
-    }
 
     @Override
     @Transactional

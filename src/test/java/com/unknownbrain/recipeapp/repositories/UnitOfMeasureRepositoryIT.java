@@ -12,11 +12,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataMongoTest
-        //This will bring up the spring context
 class UnitOfMeasureRepositoryIT {
 
     @Autowired
-    UnitOfMeasureRepository unitOfMeasureRepository;
+    private UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;

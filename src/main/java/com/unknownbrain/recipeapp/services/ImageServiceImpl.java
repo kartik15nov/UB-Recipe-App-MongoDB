@@ -2,6 +2,7 @@ package com.unknownbrain.recipeapp.services;
 
 import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.repositories.reactive.RecipeReactiveRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,13 +13,10 @@ import java.util.Objects;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    RecipeReactiveRepository recipeReactiveRepository;
-
-    public ImageServiceImpl(RecipeReactiveRepository recipeReactiveRepository) {
-        this.recipeReactiveRepository = recipeReactiveRepository;
-    }
+    private final RecipeReactiveRepository recipeReactiveRepository;
 
     @Override
     public Mono<Void> saveImageFile(String recipeId, MultipartFile file) {

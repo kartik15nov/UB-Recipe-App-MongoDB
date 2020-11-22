@@ -7,6 +7,7 @@ import com.unknownbrain.recipeapp.domain.Ingredient;
 import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.repositories.reactive.RecipeReactiveRepository;
 import com.unknownbrain.recipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -17,22 +18,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
-    RecipeReactiveRepository recipeReactiveRepository;
-    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 
-    IngredientToIngredientCommand ingredientToIngredientCommand;
-    IngredientCommandToIngredient ingredientCommandToIngredient;
-
-    public IngredientServiceImpl(RecipeReactiveRepository recipeReactiveRepository, UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository, IngredientToIngredientCommand ingredientToIngredientCommand, IngredientCommandToIngredient ingredientCommandToIngredient) {
-
-        this.recipeReactiveRepository = recipeReactiveRepository;
-        this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
-
-        this.ingredientToIngredientCommand = ingredientToIngredientCommand;
-        this.ingredientCommandToIngredient = ingredientCommandToIngredient;
-    }
+    private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
     @Override
     public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId) {

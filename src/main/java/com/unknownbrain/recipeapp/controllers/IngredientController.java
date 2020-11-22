@@ -5,6 +5,7 @@ import com.unknownbrain.recipeapp.commands.UnitOfMeasureCommand;
 import com.unknownbrain.recipeapp.services.IngredientService;
 import com.unknownbrain.recipeapp.services.RecipeService;
 import com.unknownbrain.recipeapp.services.UnitOfMeasureService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 public class IngredientController {
 
     public static final String RECIPE_INGREDIENT_INGREDIENT_FORM = "recipe/ingredient/ingredientform";
@@ -29,12 +31,6 @@ public class IngredientController {
     @InitBinder("ingredient")
     public void initBinder(WebDataBinder webDataBinder) {
         this.webDataBinder = webDataBinder;
-    }
-
-    public IngredientController(RecipeService recipeService, IngredientService ingredientService, UnitOfMeasureService unitOfMeasureService) {
-        this.recipeService = recipeService;
-        this.ingredientService = ingredientService;
-        this.unitOfMeasureService = unitOfMeasureService;
     }
 
     @GetMapping("/recipe/{id}/ingredients")

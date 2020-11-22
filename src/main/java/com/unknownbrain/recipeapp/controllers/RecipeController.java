@@ -2,6 +2,7 @@ package com.unknownbrain.recipeapp.controllers;
 
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.services.RecipeService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 public class RecipeController {
 
     private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
@@ -22,10 +24,6 @@ public class RecipeController {
     @InitBinder
     public void initBinder(WebDataBinder webDataBinder) {
         this.webDataBinder = webDataBinder;
-    }
-
-    public RecipeController(RecipeService recipeService) {
-        this.recipeService = recipeService;
     }
 
     @GetMapping("/recipe/{id}/view")

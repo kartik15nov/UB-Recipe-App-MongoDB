@@ -3,6 +3,8 @@ package com.unknownbrain.recipeapp.controllers;
 import com.unknownbrain.recipeapp.commands.RecipeCommand;
 import com.unknownbrain.recipeapp.services.ImageService;
 import com.unknownbrain.recipeapp.services.RecipeService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+@Log4j2
 @Controller
+@RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
     private final RecipeService recipeService;
-
-    public ImageController(ImageService imageService, RecipeService recipeService) {
-        this.imageService = imageService;
-        this.recipeService = recipeService;
-    }
 
     @GetMapping("/recipe/{recipeId}/image")
     public String getImageForm(@PathVariable String recipeId, Model model) {

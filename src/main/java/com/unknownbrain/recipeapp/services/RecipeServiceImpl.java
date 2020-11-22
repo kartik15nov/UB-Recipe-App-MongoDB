@@ -5,6 +5,7 @@ import com.unknownbrain.recipeapp.converters.fromCommand.RecipeCommandToRecipe;
 import com.unknownbrain.recipeapp.converters.toCommand.RecipeToRecipeCommand;
 import com.unknownbrain.recipeapp.domain.Recipe;
 import com.unknownbrain.recipeapp.repositories.reactive.RecipeReactiveRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -14,16 +15,11 @@ import java.util.Objects;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeReactiveRepository recipeReactiveRepository;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
     private final RecipeToRecipeCommand recipeToRecipeCommand;
-
-    public RecipeServiceImpl(RecipeReactiveRepository recipeReactiveRepository, RecipeCommandToRecipe recipeCommandToRecipe, RecipeToRecipeCommand recipeToRecipeCommand) {
-        this.recipeReactiveRepository = recipeReactiveRepository;
-        this.recipeCommandToRecipe = recipeCommandToRecipe;
-        this.recipeToRecipeCommand = recipeToRecipeCommand;
-    }
 
     @Override
     public Flux<Recipe> getRecipes() {
@@ -48,7 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
         Objects.requireNonNull(recipeCommand);
 
         return recipeReactiveRepository.
-                save(recipeCommandToRecipe.convert(recipeCommand))
+                save(Objects.requireNonNull(recipeCommandToRecipe.convert(recipeCommand)))
                 .map(recipeToRecipeCommand::convert);
     }
 
